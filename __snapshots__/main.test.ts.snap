@@ -1,0 +1,15 @@
+export const snapshot = {};
+
+snapshot[`액세스 토큰을 생성할 수 있다. 1`] = `"eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ5b3VyLWFwcCIsInN1YiI6Iuq5gOuVoe2DhCIsImV4cCI6MTcyMzI4MTExN30.sAwE7ck1x3NS_AQ7e-uc-WKyzOPURjPlNftLzjguIN4ZrOUpQ4LhNsOWbMqDf7EicsG25JCj2BLlFQ35KROhww"`;
+
+snapshot[`리프레시 토큰을 생성할 수 있다. 1`] = `"eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ5b3VyLWFwcCIsInN1YiI6Iuq5gOuVoe2DhCIsImV4cCI6MTcyMzg4MjMxN30.NIRg4zcmW7TsbcH2xV1sf008fWoOxT-0jkXPt2W_P8g3S8Tj7csFR8g-9M9i-g-gwGmFDhahecaf7oku6dPJzg"`;
+
+snapshot[`액세스 토큰을 검증할 수 있다. 1`] = `
+{
+  exp: 1723281117,
+  iss: "your-app",
+  sub: "김땡탄",
+}
+`;
+
+snapshot[`액세스 토큰을 검증할 수 있다. 2`] = `null`;
