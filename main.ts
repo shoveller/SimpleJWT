@@ -40,7 +40,7 @@ export async function verifyJwt(token: string) {
     try {
         return await verify(token, key);
     } catch (error) {
-        console.error("Invalid JWT:", error);
+        // console.error("Invalid JWT:", error);
         return null;
     }
 }
@@ -49,7 +49,10 @@ export async function verifyJwt(token: string) {
 async function login(req: Request) {
     const { username } = await req.json();
     if (!username) {
-        return new Response("Username is required", { status: 400 });
+        return new Response(
+            JSON.stringify({ message: "Username is required" }),
+            { status: 400 },
+        );
     }
 
     // Access Token과 Refresh Token 생성
@@ -67,17 +70,24 @@ async function resource(req: Request) {
     const authHeader = req.headers.get("Authorization");
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
         // 토큰이 없으면 인증 실패
-        return new Response("Unauthorized", { status: 401 });
+        return new Response(JSON.stringify({ message: "Unauthorized" }), {
+            status: 401,
+        });
     }
 
     const token = authHeader.substring(7);
     const payload = await verifyJwt(token);
     if (payload) {
-        return new Response(`Hello, ${payload.sub}!`, { status: 200 });
+        return new Response(
+            JSON.stringify({ message: `Hello, ${payload.sub}!` }),
+            { status: 200 },
+        );
     }
 
     // 토큰이 검증을 통과하지 못하면 토큰 실패
-    return new Response("Invalid token", { status: 401 });
+    return new Response(JSON.stringify({ message: "Invalid token" }), {
+        status: 401,
+    });
 }
 
 // 토큰 갱신 핸들러 (리프레시 토큰 사용)
@@ -85,13 +95,19 @@ async function tokenRefresh(req: Request) {
     const { refreshToken } = await req.json();
     // 리프레시 토큰이 없으면 400 처리
     if (!refreshToken) {
-        return new Response("Refresh token is required", { status: 400 });
+        return new Response(
+            JSON.stringify({ message: "Refresh token is required" }),
+            { status: 400 },
+        );
     }
 
     // 리프레시 토큰 검증에 실패하면 401 처리
     const payload = await verifyJwt(refreshToken);
     if (!payload) {
-        return new Response("Invalid refresh token", { status: 401 });
+        return new Response(
+            JSON.stringify({ message: "Invalid refresh token" }),
+            { status: 401 },
+        );
     }
 
     // 토큰 검증에 성공하면 새로운 토큰 발급
@@ -105,7 +121,7 @@ async function tokenRefresh(req: Request) {
 if (import.meta.main) {
     Deno.serve((req) => {
         const url = new URL(req.url);
-        if (url.pathname === "/") {
+        if (url.pathname === "/resource") {
             return resource(req);
         }
         if (url.pathname === "/login" && req.method === "POST") {
@@ -115,6 +131,8 @@ if (import.meta.main) {
             return tokenRefresh(req);
         }
 
-        return new Response("404", { status: 404 });
+        return new Response(JSON.stringify({ message: "404" }), {
+            status: 404,
+        });
     });
 }
